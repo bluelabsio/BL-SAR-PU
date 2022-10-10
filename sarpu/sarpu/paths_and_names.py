@@ -67,25 +67,25 @@ def propensity_labeling_path(data_folder, data_name, propensity_model,labeling):
 ## RESULTS ##
 #############
 
-def experiment_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings):
-    return os.path.join(results_folder, data_name, '.__.'.join(list(map(str,[propensity_model.name(),settings, labeling, partition]))))
+def experiment_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, folder_name = ''):
+    return os.path.join(results_folder, data_name, '.__.'.join(list(map(str,[propensity_model.name(),settings, labeling, partition]))) + folder_name)
 
-def experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method):
-    return os.path.join(experiment_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings), pu_method)
+def experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name = ''):
+    return os.path.join(experiment_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, folder_name), pu_method)
     
 def experiment_method_result_path_nolabel(results_folder, data_name, partition, settings, pu_method):
     return "/".join([results_folder, data_name, '.__.'.join(list(map(str,["*",settings, "*", str(partition)]))),pu_method,"results.csv"])
 
 
-def experiment_classifier_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method):
-    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method),"f.model")
+def experiment_classifier_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name = ''):
+    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name),"f.model")
 
-def experiment_propensity_model_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method):
-    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method),"e.model")
+def experiment_propensity_model_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name = ''):
+    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name),"e.model")
 
 
-def experiment_results_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method):
-    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method),"results.csv")
+def experiment_results_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name = ''):
+    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name),"results.csv")
 
-def experiment_info_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method):
-    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method),"info.csv")
+def experiment_info_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name = ''):
+    return os.path.join(experiment_method_result_folder_path(results_folder, data_name, propensity_model, labeling, partition, settings, pu_method, folder_name),"info.csv")
