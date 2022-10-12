@@ -14,7 +14,7 @@ def pu_learn_sar_em(x,
         slope_eps=0.0001,
         ll_eps=0.0001,
         convergence_window=10,
-        refit_classifier=True,
+        refit_classifier=False,
         verbose = True
     ):
 
@@ -106,6 +106,8 @@ def pu_learn_sar_em(x,
     print(f'EM Complete; {datetime.now() - strt} Elapsed')
 
     if refit_classifier:
+        if e_class == 'LogisticRegressionPU':
+            classification_model.model.max_iter = 10000
         classification_model.fit(x,s,e=expected_propensity)
 
     info['nb_iterations']=i
