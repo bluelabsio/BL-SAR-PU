@@ -211,5 +211,3 @@ def subsetsThroughDT(data, tree_train, estimate, labels,splitCrit=max_bepp(5), m
   
   
 
-if __name__=='__main__':
-    main()
