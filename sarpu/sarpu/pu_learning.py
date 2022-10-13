@@ -14,7 +14,7 @@ def pu_learn_sar_em(x,
         slope_eps=0.0001,
         ll_eps=0.0001,
         convergence_window=10,
-        refit_classifier=True,
+        refit_classifier=False,
         verbose = True
     ):
 
