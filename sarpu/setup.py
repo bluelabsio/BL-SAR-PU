@@ -4,7 +4,7 @@ import setuptools
 setuptools.setup(
     name="sarpu",
     version="0.0.1",
-    author="Jessa Bekker, Bennet Bernstein, Shweta Chopra",
+    author="Jessa Bekker, Bennett Bernstein, Shweta Chopra",
     author_email="jessa.bekker@gmail.com",
     description="Adapted Package for learning from Positive and Unlabeled data under the SAR assumption",
     long_description_content_type="text/markdown",
