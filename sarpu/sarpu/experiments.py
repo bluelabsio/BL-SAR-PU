@@ -14,7 +14,6 @@ from sarpu.input_output import *
 from sarpu.labeling_mechanisms import parse_labeling_model
 from sarpu.paths_and_names import *
 from sarpu.pu_learning import *
-from tice import tice
 
 
 def train_and_evaluate(data_folder, results_folder, data_name, labeling_model, labeling, partition, settings, pu_method, rerun_experiments=False, folder_name = ''):
