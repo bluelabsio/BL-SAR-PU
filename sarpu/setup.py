@@ -34,7 +34,5 @@ setuptools.setup(
         "seaborn",
         "dill",
         "cvxopt",
-        "tice @ git+https://github.com/bluelabsio/BL-SAR-PU.git@installation-edits#subdirectory=lib/tice",
-        "km @ git+https://github.com/bluelabsio/BL-SAR-PU.git@installation-edits#subdirectory=lib/km"
     ],
 )

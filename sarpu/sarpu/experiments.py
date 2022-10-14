@@ -9,7 +9,6 @@ import pandas as pd
 import sklearn.metrics
 from bitarray import bitarray
 
-from km.Kernel_MPE_grad_threshold import wrapper as ramaswamy
 from sarpu.evaluation import *
 from sarpu.input_output import *
 from sarpu.labeling_mechanisms import parse_labeling_model
