@@ -3,27 +3,18 @@ This repository contains the code that was used in the paper ``Beyond the Select
 
 # Install
 
-Make virtual environment with python 3 and activate it:
+Install using pip
 
-```console
-$ virtualenv -p python3 env_sarpu
-$ source env_sarpu/bin/activate
+```
+$ pip install git+https://github.com/bluelabsio/BL-SAR-PU.git
 ```
 
-Install required packages, the sar pu code and other local libraries. The KM library is downloaded from the original source and made into a python package, compatible with python 3.
+To install from a specific branch under development, use:
 
-```console
-(env_sarpu) $ pip install -r requirements.txt
-(env_sarpu) $ pip install -e sarpu
-(env_sarpu  $ python make_km_lib.py
-(env_sarpu) $ pip install -e lib/tice
-(env_sarpu) $ pip install -e lib/km
+```
+$ pip install git+https://github.com/bluelabsio/BL-SAR-PU.git@<branch-name>
 ```
 
-Install a jupyter kernel with the environment:
-
-```console
-(env_sarpu) $ ipython kernel install --user --name=env_sarpu
 ```
 
 # Data
