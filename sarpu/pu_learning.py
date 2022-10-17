@@ -2,75 +2,24 @@ import numpy as np
 import sklearn.linear_model
 import time
 from sarpu.PUmodels import *
-
-
-
-def pu_learn_sar_e(x, s, e, classification_model=None, classification_attributes=None):
-    start = time.time()
-    if classification_model is None:
-        classification_model = LogisticRegressionPU()
-    if classification_attributes is None:
-        classification_attributes = np.ones(x.shape[1]).astype(bool)
-
-    classification_model = LimitedFeaturesModel(classification_model, classification_attributes)
-
-    classification_model.fit(x,s,e=e)
-
-    info = {'time':time.time()-start}
-
-    return classification_model, info
-
-
-def pu_learn_scar_c(x, s, c, classification_model=None, classification_attributes=None):
-    start = time.time()
-    if classification_model is None:
-        classification_model = LogisticRegressionPU()
-    if classification_attributes is None:
-        classification_attributes = np.ones(x.shape[1]).astype(bool)
-
-    classification_model = LimitedFeaturesModel(classification_model, classification_attributes)
-
-    e = np.ones_like(s)*c
-    classification_model.fit(x,s,e=e)
-
-    info = {'time':time.time()-start}
-
-    return classification_model, info
-
-
-
-def pu_learn_neg(x, s, classification_model=None, classification_attributes=None):
-    start = time.time()
-    if classification_model is None:
-        classification_model = LogisticRegressionPU()
-    if classification_attributes is None:
-        classification_attributes = np.ones(x.shape[1]).astype(bool)
-
-    classification_model = LimitedFeaturesModel(classification_model, classification_attributes)
-
-    e = np.ones_like(s)
-    classification_model.fit(x,s)
-
-    info = {'time':time.time()-start}
-
-    return classification_model, info
-
-
+from datetime import datetime # bgb
 
 def pu_learn_sar_em(x,
-                 s,
-                 propensity_attributes,
-                 classification_attributes=None,
-                 classification_model=None,
-                 propensity_model=None,
-                 max_its=500,
-                 slope_eps=0.0001,
-                 ll_eps=0.0001,
-                 convergence_window=10,
-                 refit_classifier=True
-                 ):
+        s,
+        propensity_attributes,
+        classification_attributes=None,
+        classification_model=None,
+        propensity_model=None,
+        max_its=500,
+        slope_eps=0.0001,
+        ll_eps=0.0001,
+        convergence_window=10,
+        refit_classifier=False,
+        verbose = True
+    ):
 
     start = time.time()
+    strt = datetime.now()
     if classification_model is None:
         classification_model = LogisticRegressionPU()
     if propensity_model is None:
@@ -83,9 +32,26 @@ def pu_learn_sar_em(x,
 
     classification_model = LimitedFeaturesModel(classification_model, classification_attributes)
     propensity_model = LimitedFeaturesModel(propensity_model, propensity_attributes)
+    
+    f_class = classification_model.model.__class__.__name__
+    e_class = propensity_model.model.__class__.__name__
+    
+    output_str = f'F Model: {f_class}; penalty = {classification_model.model.penalty}; '
+    
+    if f_class == 'SGDClassifierPU':
+        output_str += f'alpha = {classification_model.model.alpha}; batch size = {classification_model.model.minibatch}\n'
+    elif f_class == 'LogisticRegressionPU':
+        output_str += f'C = {classification_model.model.C}\n'
+    
+    output_str += f'E Model: {e_class}; penalty = {propensity_model.model.penalty}; '
+    if e_class == 'SGDClassifierPU':
+        output_str += f'alpha = {propensity_model.model.alpha}; batch size = {propensity_model.model.minibatch}\n'
+    elif e_class == 'LogisticRegressionPU':
+        output_str += f'C = {propensity_model.model.C}\n'
+        
+    print(output_str)
 
     info = {}
-
     initialize_simple(x, s, classification_model, propensity_model)
 
     expected_prior_y1 = classification_model.predict_proba(x)
@@ -130,8 +96,18 @@ def pu_learn_sar_em(x,
             propensity_slope.append(average_abs_slope)
             if average_abs_slope<slope_eps and max_ll_improvement < ll_eps:
                 break #converged
+                
+        
+        if verbose:
+            if i%10 == 0:
+                print(f'EM Iteration: {i}, Log Likelihood = {ll}; {datetime.now() - strt} Elapsed')
+                
+                
+    print(f'EM Complete; {datetime.now() - strt} Elapsed')
 
     if refit_classifier:
+        if e_class == 'LogisticRegressionPU':
+            classification_model.model.max_iter = 10000
         classification_model.fit(x,s,e=expected_propensity)
 
     info['nb_iterations']=i

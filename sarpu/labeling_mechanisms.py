@@ -52,7 +52,6 @@ def label_data(data_folder,
 
     x, y = read_data((data_path(data_folder, data_name),
                       classlabels_path(data_folder, data_name)))
-
     if relabel_data or not os.path.exists(propensity_model_path(data_folder, data_name, labeling_model)):
         _save_propensity_model_and_labels(
             data_folder, data_name,
@@ -89,6 +88,7 @@ def _save_propensity_model_and_labels(data_folder, data_name, x, y,
 
     # Save the propensity model
     out_model = propensity_model_path(data_folder, data_name, propensity_model)
+    print(out_model)
     with open(out_model, "wb+") as out_model_file:
         pickle.dump(propensity_model, out_model_file)
     print('Propensity model saved to {}'.format(out_model))
@@ -123,8 +123,8 @@ class BaseLabelingMechanism:
         pass
 
     def name(self):
-        return self.type_name() + "._." + ".".join(
-            map(str, self.propensity_attributes))
+        return self.type_name() + "._." #+ ".".join( #BGB
+#             map(str, self.propensity_attributes))  #BGB
 
     def propensity_scores(self, x):
         pass
@@ -153,10 +153,10 @@ class SimpleLabeling(BaseLabelingMechanism):
         return "simple_" + str(self.min_prob) + "_" + str(self.max_prob)
 
     def name(self):
-        return self.type_name() + "._." + ".".join(
-            map(
-                lambda a: ("" if a[1] > 0 else "-") + str(a[0]),
-                zip(self.propensity_attributes, self.propensity_attribute_signs)))
+        return self.type_name() + "._."# + ".".join(                                 BGB
+#             map(                                                                   BGB
+#                 lambda a: ("" if a[1] > 0 else "-") + str(a[0]),                   BGB
+#                 zip(self.propensity_attributes, self.propensity_attribute_signs))) BGB
 
     def propensity_scores(self, x):
         """
@@ -171,7 +171,7 @@ class SimpleLabeling(BaseLabelingMechanism):
         return (scaled**(1 / self.nb_propensity_attributes)).prod(1)
 
     def fit(self, x, y, w=None):
-        x_e = x[:, np.abs(self.propensity_attributes)] * np.sign(self.propensity_attributes)
+        x_e = x[:, np.abs(self.propensity_attributes)] * np.sign([i + .05 for i in self.propensity_attributes]) ## BGB Edit
         self.minx = x_e.min(0)
         self.maxx = x_e.max(0)
 
